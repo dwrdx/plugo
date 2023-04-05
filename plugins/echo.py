@@ -3,6 +3,7 @@
 import time
 import socket
 import msgpack
+import sys
 
 
 
@@ -22,11 +23,21 @@ if __name__ == '__main__':
     s.connect(('localhost', 8080))
     while True:
         in_data = {
+            "Type": 0,
             'Method': 'Register',
             'Params': 
                 {'Name': 'echo.py', 'Address': s.getsockname()[1]},
             
         }
         send_tcp(s, in_data)
+        in_data = {
+            "Type": 1,
+            'Method': 'Register',
+            'Result': 
+                {'Name': 'echo.py', 'Address': s.getsockname()[1]},
+            
+        }
+        send_tcp(s, in_data)
+        recv_tcp(s)
         time.sleep(1)
     s.close()
